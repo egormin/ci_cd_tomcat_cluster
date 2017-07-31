@@ -1,48 +1,45 @@
-# Example CASified Java Web Application
+sample-jersey-webapp
+====================
 
-This is sample java web application that exercises the CAS protocol features via the Java CAS Client.
+This is a sample web application that uses Java + Jersey on the backend and Angular JS on the frontend. It demonstrates using the Stormpath SDK to generate API Keys, create new accounts, generate Oauth Tokens, and make HTTP calls to REST endpoints using both Oauth and Basic Authentication.
 
-Configure
----------
+An in-depth blog post/tutorial for this code is available [here](https://stormpath.com/blog/jersey-app-key-management/).
 
-- Adjust the url endpoints of the CAS server and 
-the application server in the [`web.xml`](https://github.com/UniconLabs/cas-sample-java-webapp/blob/master/src/main/webapp/WEB-INF/web.xml) file.
+This project requires maven.
 
-## Build
+Get started:
 
-* Create a Java keystore at `/etc/cas/jetty/thekeystore` with the password `changeit`.
-* Import your server certificate inside this keystore.
-
-```bash
-mvn clean package jetty:run-forked
 ```
-
-The application will be available on:
-```bash
-http://localhost:9080/sample
+$ git clone https://github.com/rkazarin/sample-jersey-webapp.git
+$ cd sample-jersey-webapp
+$ mvn install
 ```
-and
-```bash
-https://localhost:9443/sample
-```
+Deploy the .war file to your web container/application server and launch/access it according to your container's configuration.
 
- 
-## Testing High Availability
+Questions or suggestions? Please don't hesitate to email me at email.rkazarin@gmail.com
 
-Assuming you have deployed CAS on two nodes, you can use the sample application to make sure all nodes are properly
-sharing the ticket state. To do this, in the `web.xml` file ensure that:
+### Application walkthrough:
 
-- The `casServerLoginUrl` of the `CAS Authentication Filter` points to CAS node 1 (i.e `https://cas1.sso.edu:8443/cas/login`).
-- The `casServerUrlPrefix` of the `CAS Validation Filter` points to CAS node 2 (i.e `https://cas2.sso.edu:8443/cas`)
-- For both of the above filters, the `serverName` should always point to the location where *this sample application* is deployed.
+**Login Screen** <br>
+Type your username/password if you have an account. If not, fill out the 'Create Account' form, submit, and then sign in.<br>
+![alt tag](http://i.imgur.com/SACJ88l.png)
 
+**Dashboard** <br>
+As soon as you log in, an API Key and Secret will be generated for you. The sidebar titles describe the functionality hidden behind each link.<br>
+![alt tag](http://i.imgur.com/UIf6xjS.png)
 
-Deploy the application and test. You may also want to reverse the order of CAS 
-nodes 1 and 2 in the above configuration, redeploy and test again.
+**Make a REST call using Basic Auth** <br>
+Click this sidebar link and the functionality will pop up in the center of the page. Select a city and experience the simplicity of Basic authorization! <br>
+![alt tag](http://i.imgur.com/UgQ0jWC.png)
 
-> Alternatively, one could test distributed CAS nodes without any client application 
-set up using [this](https://github.com/UniconLabs/duct) small command line utility
+**Generate an Oauth Token** <br>
+This functionality lets you exchange your API credentials for an Oauth Token. First, select the cities you'd like to be able to have access to (scope). Clicking GetOauth will generate your token and set you up for the next section.
+![alt tag](http://i.imgur.com/RwACzLW.png)
 
+**Make permitted REST call using Oauth** <br>
+Since we included San Mateo in our scope when generating an Oauth Token we can view it's weather with no problem.
+![alt tag](http://i.imgur.com/7TctAt1.png)
 
-
-
+**Make a forbidden REST call using Oauth** <br>
+Since we did not include Berlin in our scope when generating an Oauth Token, attempting to view it's weather is prohibited!
+![alt tag](http://i.imgur.com/HvhKuml.png)
