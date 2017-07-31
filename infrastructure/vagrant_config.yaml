@@ -15,7 +15,7 @@
     - yum install -y nano
 
 - host: tomcat2
-  os: 'centos6'
+  os: 'centos7'
   ip: '192.168.33.120'
   memory: '512'
   cpu_num: '1'
